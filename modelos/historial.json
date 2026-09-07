@@ -1,0 +1,33 @@
+[
+  {
+    "version": "v3_res_col",
+    "archivo": "v3_res_col.pkl",
+    "fecha": "2026-09-07 11:14",
+    "habilidades": [
+      "Resolución de Problemas",
+      "Colaboración"
+    ],
+    "n_registros": 5000
+  },
+  {
+    "version": "v1_com_lid",
+    "archivo": "v1_com_lid.pkl",
+    "fecha": "2026-09-07 10:55",
+    "habilidades": [
+      "Comunicación",
+      "Liderazgo"
+    ],
+    "n_registros": 5000
+  },
+  {
+    "version": "v3_lid_res_col",
+    "archivo": "v3_lid_res_col.pkl",
+    "fecha": "2026-09-07 11:36",
+    "habilidades": [
+      "Liderazgo",
+      "Resolución de Problemas",
+      "Colaboración"
+    ],
+    "n_registros": 5000
+  }
+]
