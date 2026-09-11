@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 
-SEED = 42
+SEED = None # Cambiado a None para que genere datos diferentes cada vez
 N = 5000
 rng = np.random.default_rng(SEED)
 
@@ -140,8 +140,10 @@ def main():
         data[f"{prefijo}_score"] = np.round(score, 2)
 
     df = pd.DataFrame(data)
-    df.to_csv("datos/dataset_habilidades_blandas.csv", index=False, encoding="utf-8-sig")
-    print(f"Dataset generado: {len(df)} registros -> datos/dataset_habilidades_blandas.csv")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"datos/dataset_habilidades_blandas_{timestamp}.csv"
+    df.to_csv(filename, index=False, encoding="utf-8-sig")
+    print(f"Dataset generado: {len(df)} registros -> {filename}")
     print(df.head())
 
 

@@ -143,7 +143,7 @@ def mejor_lider_por_area(df):
 
 
 def entrenar_modelo(df, habilidades):
-    """Entrena un modelo K-Means en memoria (no lo guarda en disco)."""
+    """Crea un modelo K-Means en memoria (no lo guarda en disco)."""
     score_cols = [f"{PESOS[h]['prefijo']}_score" for h in habilidades]
     X = df[score_cols].values
     scaler = StandardScaler()
@@ -374,83 +374,110 @@ def slug(texto):
 def inyectar_css():
     st.markdown(f"""
     <style>
-    .stApp {{ background: #FFFFFF; }}
+    .stApp {{ background: #FAFAFC; font-size: 1.1rem; }}
 
-    div.block-container {{ padding-top: 1.6rem; padding-bottom: 1.5rem; }}
+    div.block-container {{ padding-top: 2rem; padding-bottom: 2rem; }}
 
     .hero {{
-        background: {COLOR_PRIMARIO};
-        padding: 14px 22px; border-radius: 10px; color: white;
-        margin-bottom: 12px;
+        background: linear-gradient(135deg, {COLOR_PRIMARIO} 0%, #9F82F7 100%);
+        padding: 24px 32px; border-radius: 16px; color: white;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 24px rgba(189, 168, 255, 0.3);
+        text-align: center;
     }}
-    .hero h1 {{ margin: 0; font-size: 1.28rem; font-weight: 600; }}
-    .hero p {{ margin: 3px 0 0 0; opacity: 0.9; font-size: 0.82rem; }}
+    .hero h1 {{ margin: 0; font-size: 2.1rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }}
+    .hero p {{ margin: 8px auto 0 auto; opacity: 0.95; font-size: 1.1rem; max-width: 800px; }}
 
     div[data-testid="stMetric"] {{
-        background: {COLOR_FONDO_SUAVE}; border-radius: 10px; padding: 8px 12px;
-        border: 1px solid {COLOR_BORDE}; border-top: 3px solid {COLOR_PRIMARIO};
+        background: #FFFFFF; border-radius: 16px; padding: 12px 16px;
+        border: 1px solid #F0EEF8;
+        box-shadow: 0 4px 12px rgba(189, 168, 255, 0.08);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }}
-    div[data-testid="stMetricLabel"] {{ font-weight: 600; color: {COLOR_PRIMARIO}; }}
+    div[data-testid="stMetric"]:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(189, 168, 255, 0.15);
+    }}
+    div[data-testid="stMetricLabel"] {{ font-weight: 600; color: #7B7B85; font-size: 1.1rem; }}
+    div[data-testid="stMetricValue"] {{ color: {COLOR_PRIMARIO}; font-weight: 700; font-size: 2.2rem; }}
 
-    section[data-testid="stSidebar"] {{ background: #F8F8FC; }}
+    section[data-testid="stSidebar"] {{ background: #FFFFFF; border-right: 1px solid #F0EEF8; }}
     section[data-testid="stSidebar"] h2, section[data-testid="stSidebar"] h3 {{
-        color: {COLOR_PRIMARIO};
+        color: {COLOR_PRIMARIO}; font-weight: 700; font-size: 1.4rem;
     }}
-    section[data-testid="stSidebar"] div.block-container {{ padding-top: 1rem; }}
+    section[data-testid="stSidebar"] div.block-container {{ padding-top: 2rem; }}
+
+    /* Aumentar texto de listas, dropdowns y tablas */
+    [data-baseweb="select"] {{ font-size: 1.1rem !important; }}
+    [data-baseweb="menu"] {{ font-size: 1.1rem !important; }}
+    .stMultiSelect [data-baseweb="tag"] {{ font-size: 1.05rem !important; padding: 6px 10px; }}
+    [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li {{ font-size: 1.1rem !important; }}
+    label {{ font-size: 1.1rem !important; }}
+    table {{ font-size: 1.1rem !important; }}
+    th, td {{ font-size: 1.1rem !important; }}
+    
+    /* Intento de aumentar fuente en DataFrames (si aplica) */
+    [data-testid="stDataFrame"] {{ font-size: 1.1rem !important; }}
 
     .stTabs [data-baseweb="tab-list"] {{
-        gap: 20px; border-bottom: 2px solid {COLOR_BORDE}; margin-bottom: 2px;
+        gap: 10px; border-bottom: none; margin-bottom: 16px; background: {COLOR_FONDO_SUAVE}; padding: 6px; border-radius: 12px;
     }}
     .stTabs [data-baseweb="tab"] {{
-        background: transparent; border-radius: 0; padding: 6px 2px;
-        font-weight: 600; color: #7B7B85; border-bottom: 3px solid transparent;
-        margin-bottom: -2px;
+        background: transparent; border-radius: 8px; padding: 8px 16px;
+        font-weight: 600; color: #7B7B85; border: none; font-size: 1.1rem;
+        margin: 0; transition: all 0.2s ease;
     }}
-    .stTabs [data-baseweb="tab"]:hover {{ color: {COLOR_PRIMARIO}; }}
+    .stTabs [data-baseweb="tab"]:hover {{ color: {COLOR_PRIMARIO}; background: rgba(189,168,255,0.2); }}
     .stTabs [aria-selected="true"] {{
-        background: transparent; color: {COLOR_PRIMARIO};
-        border-bottom: 3px solid {COLOR_PRIMARIO};
+        background: #FFFFFF !important; color: {COLOR_PRIMARIO};
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }}
-    .stTabs [data-baseweb="tab-highlight"] {{ background: transparent; }}
-    .stTabs [data-baseweb="tab-border"] {{ background: transparent; }}
-    .stTabs {{ margin-top: -8px; }}
+    .stTabs [data-baseweb="tab-highlight"] {{ display: none; }}
+    .stTabs [data-baseweb="tab-border"] {{ display: none; }}
+    .stTabs {{ margin-top: 0px; }}
 
     .stButton > button, .stDownloadButton > button {{
-        border-radius: 6px; border: 1px solid {COLOR_PRIMARIO}; font-weight: 600;
-        padding: 0.3rem 0.9rem;
+        border-radius: 8px; border: 1px solid {COLOR_PRIMARIO}; font-weight: 600;
+        padding: 0.5rem 1.4rem; transition: all 0.2s ease; font-size: 1.1rem;
     }}
-    .stDownloadButton > button {{ background: {COLOR_PRIMARIO}; color: white; }}
+    .stButton > button:hover {{ background: {COLOR_FONDO_SUAVE}; transform: translateY(-1px); }}
+    .stDownloadButton > button {{ background: {COLOR_PRIMARIO}; color: white; border: none; box-shadow: 0 4px 10px rgba(189,168,255,0.3); }}
+    .stDownloadButton > button:hover {{ background: #A287F4; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(189,168,255,0.4); color: white; }}
 
     .badge {{
-        display: inline-block; padding: 2px 9px; border-radius: 4px;
-        background: {COLOR_FONDO_SUAVE}; color: {COLOR_PRIMARIO}; font-size: 0.76rem;
-        font-weight: 600; margin: 0 4px 6px 0; border: 1px solid {COLOR_BORDE};
+        display: inline-block; padding: 6px 14px; border-radius: 20px;
+        background: {COLOR_FONDO_SUAVE}; color: {COLOR_PRIMARIO}; font-size: 1.05rem;
+        font-weight: 700; margin: 0 6px 8px 0; border: 1px solid {COLOR_BORDE};
     }}
 
     .card-indicador {{
-        border-radius: 10px; padding: 10px 14px; background: white;
-        border: 1px solid {COLOR_BORDE}; box-shadow: 0 1px 3px rgba(140,122,230,0.10);
-        margin-bottom: 10px;
+        border-radius: 16px; padding: 16px 20px; background: white;
+        border: 1px solid #F0EEF8; box-shadow: 0 4px 12px rgba(189, 168, 255, 0.08);
+        margin-bottom: 14px; transition: transform 0.2s ease, box-shadow 0.2s ease;
     }}
-    .card-indicador .valor {{ font-size: 1.32rem; font-weight: 700; margin: 1px 0 0 0; line-height: 1.2; }}
-    .card-indicador .etiqueta {{ font-size: 0.76rem; color: #52525B; font-weight: 600; }}
-    .card-indicador .sub {{ font-size: 0.72rem; color: #8B8B93; margin-top: 1px; }}
+    .card-indicador:hover {{
+        transform: translateY(-3px); box-shadow: 0 8px 20px rgba(189, 168, 255, 0.15);
+    }}
+    .card-indicador .valor {{ font-size: 2.2rem; font-weight: 800; margin: 4px 0 0 0; line-height: 1.2; letter-spacing: -0.5px; }}
+    .card-indicador .etiqueta {{ font-size: 1.05rem; color: #7B7B85; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }}
+    .card-indicador .sub {{ font-size: 0.9rem; color: #A1A1AA; margin-top: 4px; }}
 
     .section-title {{
-        border-left: 4px solid {COLOR_PRIMARIO}; padding-left: 9px;
-        margin: 10px 0 12px 0; font-weight: 700; font-size: 0.98rem; color: {COLOR_TEXTO};
+        background: {COLOR_FONDO_SUAVE}; display: inline-block;
+        padding: 8px 16px; border-radius: 8px; color: {COLOR_PRIMARIO};
+        margin: 16px 0 16px 0; font-weight: 700; font-size: 1.25rem;
     }}
 
-    div[data-testid="stVerticalBlock"] {{ gap: 0.9rem; }}
-    div[data-testid="stPlotlyChart"] {{ margin: 6px 0 10px 0; }}
-    div[data-testid="column"] {{ padding: 0 10px; }}
+    div[data-testid="stVerticalBlock"] {{ gap: 1.2rem; }}
+    div[data-testid="stPlotlyChart"] {{ margin: 10px 0 16px 0; }}
+    div[data-testid="column"] {{ padding: 0 12px; }}
     </style>
     """, unsafe_allow_html=True)
 
 
 def tarjeta_indicador(color, etiqueta, valor, sub=""):
     st.markdown(f"""
-    <div class="card-indicador" style="border-top: 4px solid {color};">
+    <div class="card-indicador" style="border-left: 5px solid {color}; padding-left: 15px;">
         <div class="etiqueta">{etiqueta}</div>
         <div class="valor" style="color:{color};">{valor}</div>
         <div class="sub">{sub}</div>
@@ -528,7 +555,7 @@ with st.sidebar:
         st.markdown(
             "1. Sube tu CSV (o usa el generado por `generar_dataset.py`).\n"
             "2. Elige un modelo guardado (fija las habilidades por ti) o "
-            "'Entrenar nuevo modelo' para elegir tus propias 2 a 4 habilidades.\n"
+            "'Crear nuevo modelo' para elegir tus propias 2 a 4 habilidades.\n"
             "3. Explora las pestañas de resultados y descarga lo que necesites."
         )
 
@@ -537,16 +564,25 @@ with st.sidebar:
 
     st.markdown("### Modelo de agrupación")
     historial = cargar_historial()
-    opciones_modelo = ["-- Entrenar nuevo modelo --"] + [
+    opciones_modelo = ["-- Seleccionar opción --", "-- Crear nuevo modelo --"] + [
         f"{h['version']}  ({h['fecha']})" for h in historial
     ]
     opcion_modelo_label = st.selectbox("Modelo previamente generado", options=opciones_modelo)
-    if opcion_modelo_label == "-- Entrenar nuevo modelo --":
+    
+    if opcion_modelo_label == "-- Seleccionar opción --":
+        st.session_state["modelo_entrenado"] = False
+        entrada_historial = None
+    elif opcion_modelo_label == "-- Crear nuevo modelo --":
         entrada_historial = None
     else:
-        entrada_historial = historial[opciones_modelo.index(opcion_modelo_label) - 1]
+        st.session_state["modelo_entrenado"] = False
+        entrada_historial = historial[opciones_modelo.index(opcion_modelo_label) - 2]
 
     st.markdown("### Habilidades a analizar")
+    
+    def reiniciar_entrenamiento():
+        st.session_state["modelo_entrenado"] = False
+
     if entrada_historial is not None:
         habilidades_sel = entrada_historial["habilidades"]
         st.multiselect(
@@ -557,19 +593,31 @@ with st.sidebar:
         )
         st.caption(
             "Estas habilidades vienen fijadas por el modelo elegido arriba. "
-            "Para elegir otras, cambia a '-- Entrenar nuevo modelo --'."
+            "Para elegir otras, cambia a '-- Crear nuevo modelo --'."
         )
     else:
         habilidades_sel = st.multiselect(
             "Selecciona entre 2 y 4 habilidades",
             options=list(PESOS.keys()),
             default=["Comunicación", "Liderazgo"],
+            on_change=reiniciar_entrenamiento
         )
+        
+        if opcion_modelo_label == "-- Crear nuevo modelo --":
+            if st.button("Agrupar y entrenar modelo", type="primary"):
+                st.session_state["modelo_entrenado"] = True
 
 if archivo is None:
     st.info("Carga un archivo CSV para comenzar. El dataset generado por "
             "`generar_dataset.py` tiene 5000 registros de ejemplo.")
     st.stop()
+
+modelo_activo = True
+if opcion_modelo_label == "-- Seleccionar opción --":
+    modelo_activo = False
+elif opcion_modelo_label == "-- Crear nuevo modelo --" and not st.session_state.get("modelo_entrenado", False):
+    modelo_activo = False
+
 
 if not (2 <= len(habilidades_sel) <= 4):
     st.warning("Selecciona entre 2 y 4 habilidades en el panel lateral.")
@@ -614,28 +662,31 @@ else:
     resultado = None
 
 if resultado is None:
-    with st.spinner("Calculando estadística base y ejecutando el algoritmo..."):
+    with st.spinner("Calculando estadística base y procesando datos..."):
         stats_base = estadistica_propia(df_filtrado, habilidades_sel)
         lideres = mejor_lider_por_area(df_filtrado) if "Liderazgo" in habilidades_sel else None
 
-        if entrada_historial is None:
-            paquete = entrenar_modelo(df_filtrado, habilidades_sel)
-            version_actual, guardado = None, False
-        else:
-            if set(entrada_historial["habilidades"]) != set(habilidades_sel):
-                st.error(
-                    f"El modelo '{entrada_historial['version']}' se entrenó con otras "
-                    f"habilidades ({', '.join(entrada_historial['habilidades'])}). "
-                    "Elige un modelo compatible o entrena uno nuevo."
-                )
-                st.stop()
-            paquete = cargar_modelo_archivo(entrada_historial["archivo"])
-            version_actual, guardado = entrada_historial["version"], True
-
-        clusters = predecir_con_modelo(paquete, df_filtrado)
-
         df_clusters = df_filtrado.copy()
-        df_clusters["grupo"] = clusters
+        paquete = None
+        version_actual, guardado = None, False
+
+        if modelo_activo:
+            if entrada_historial is None:
+                paquete = entrenar_modelo(df_filtrado, habilidades_sel)
+                version_actual, guardado = None, False
+            else:
+                if set(entrada_historial["habilidades"]) != set(habilidades_sel):
+                    st.error(
+                        f"El modelo '{entrada_historial['version']}' se entrenó con otras "
+                        f"habilidades ({ ', '.join(entrada_historial['habilidades']) }). "
+                        "Elige un modelo compatible o crea uno nuevo."
+                    )
+                    st.stop()
+                paquete = cargar_modelo_archivo(entrada_historial["archivo"])
+                version_actual, guardado = entrada_historial["version"], True
+
+            clusters = predecir_con_modelo(paquete, df_filtrado)
+            df_clusters["grupo"] = clusters
 
         resultado = {
             "stats_base": stats_base,
@@ -669,18 +720,22 @@ MAPA_EQUIVALENCIA = {
     "Aceptable": "Desempeño medio",
     "Necesita mejora": "Bajo desempeño",
 }
-df_clusters["coincide"] = (
-    df_clusters["clasificacion_propia"].map(MAPA_EQUIVALENCIA) == df_clusters["grupo"]
-)
-pct_coincidencia = df_clusters["coincide"].mean() * 100
+if modelo_activo:
+    df_clusters["coincide"] = (
+        df_clusters["clasificacion_propia"].map(MAPA_EQUIVALENCIA) == df_clusters["grupo"]
+    )
+    pct_coincidencia = df_clusters["coincide"].mean() * 100
 
-crosstab = pd.crosstab(df_clusters["clasificacion_propia"], df_clusters["grupo"])
-crosstab = crosstab.reindex(index=["Óptimo", "Aceptable", "Necesita mejora"],
-                             columns=["Alto desempeño", "Desempeño medio", "Bajo desempeño"]).fillna(0).astype(int)
+    crosstab = pd.crosstab(df_clusters["clasificacion_propia"], df_clusters["grupo"])
+    crosstab = crosstab.reindex(index=["Óptimo", "Aceptable", "Necesita mejora"],
+                                 columns=["Alto desempeño", "Desempeño medio", "Bajo desempeño"]).fillna(0).astype(int)
 
-# --------------------- Métricas destacadas ---------------------------------
-resumen_cluster = df_clusters["grupo"].value_counts().reindex(
-    ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]).fillna(0).astype(int)
+    resumen_cluster = df_clusters["grupo"].value_counts().reindex(
+        ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]).fillna(0).astype(int)
+else:
+    pct_coincidencia = 0
+    crosstab = None
+    resumen_cluster = pd.Series({"Alto desempeño": 0, "Desempeño medio": 0, "Bajo desempeño": 0})
 colores = {"Alto desempeño": COLOR_ALTO, "Desempeño medio": COLOR_MEDIO, "Bajo desempeño": COLOR_BAJO}
 colores_propio = {"Óptimo": COLOR_ALTO, "Aceptable": COLOR_MEDIO, "Necesita mejora": COLOR_BAJO}
 total_emp = len(df_filtrado)
@@ -692,12 +747,17 @@ with m2:
     tarjeta_indicador(COLOR_PRIMARIO_CLARO, "Habilidades seleccionadas", len(habilidades_sel),
                        ", ".join(habilidades_sel))
 with m3:
-    pct_alto = resumen_cluster.get('Alto desempeño', 0) / total_emp * 100 if total_emp else 0
-    tarjeta_indicador(COLOR_ALTO, "Alto desempeño (K-Means)",
-                       f"{resumen_cluster.get('Alto desempeño', 0):,}", f"{pct_alto:.0f}% del total")
+    if modelo_activo:
+        pct_alto = resumen_cluster.get("Alto desempeño", 0) / total_emp * 100 if total_emp else 0
+        tarjeta_indicador(COLOR_ALTO, "Alto desempeño (K-Means)",
+                           f"{resumen_cluster.get('Alto desempeño', 0):,}", f"{pct_alto:.0f}% del total")
+    else:
+        tarjeta_indicador("#DDDDDD", "Alto desempeño (K-Means)", "-", "Modelo no creado")
 with m4:
-    tarjeta_indicador(COLOR_MEDIO, "Coincidencia propio vs. algoritmo", f"{pct_coincidencia:.0f}%")
-
+    if modelo_activo:
+        tarjeta_indicador(COLOR_MEDIO, "Coincidencia propio vs. algoritmo", f"{pct_coincidencia:.0f}%")
+    else:
+        tarjeta_indicador("#DDDDDD", "Coincidencia propio vs. algoritmo", "-", "Modelo no creado")
 tab_datos, tab_base, tab_algoritmo, tab_comparativa, tab_historial = st.tabs(
     ["Datos filtrados", "Estadística base", "Resultado del algoritmo", "Comparativa", "Historial de modelos"]
 )
@@ -736,7 +796,9 @@ with tab_datos:
         col: st.column_config.ProgressColumn(col, min_value=0, max_value=10, format="%.2f")
         for col in score_cols_sel
     }
-    st.dataframe(df_vista.head(300), use_container_width=True, height=380, column_config=config_columnas)
+    # Usar pandas Styler para forzar un tamaño de fuente mayor en la tabla (si la versión de Streamlit lo soporta)
+    df_styled = df_vista.head(300).style.set_properties(**{'font-size': '0.85rem'})
+    st.dataframe(df_styled, use_container_width=True, height=380, column_config=config_columnas)
     st.caption(f"Mostrando hasta 300 de {len(df_vista):,} filas que cumplen el filtro actual.")
 
     st.download_button(
@@ -762,7 +824,7 @@ with tab_base:
         tarjeta_indicador(COLOR_BAJO, "Total Necesita mejora", f"{int(stats_base['Necesita mejora'].sum()):,}",
                            "sumado entre habilidades")
 
-    st.dataframe(stats_base, use_container_width=True)
+    st.dataframe(stats_base.style.set_properties(**{'font-size': '0.85rem'}), use_container_width=True)
 
     fig1_plotly = go.Figure()
     for col, color in zip(["Óptimo", "Aceptable", "Necesita mejora"], [COLOR_ALTO, COLOR_MEDIO, COLOR_BAJO]):
@@ -791,7 +853,7 @@ with tab_base:
 
     if lideres is not None:
         titulo_seccion("Mejor líder por área")
-        st.dataframe(lideres, use_container_width=True)
+        st.dataframe(lideres.style.set_properties(**{'font-size': '0.85rem'}), use_container_width=True)
 
     pdf_base = generar_pdf(
         "Estadística base (proceso propio)", stats_base,
@@ -802,234 +864,240 @@ with tab_base:
 
 # --------------------- Tab 3: Estadística del algoritmo (clustering) -------
 with tab_algoritmo:
-    titulo_seccion("Agrupación no supervisada (K-Means, 3 grupos)")
-
-    g1, g2, g3 = st.columns(3)
-    for col, grupo in zip([g1, g2, g3], ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]):
-        cantidad = resumen_cluster.get(grupo, 0)
-        pct = cantidad / total_emp * 100 if total_emp else 0
-        with col:
-            tarjeta_indicador(colores[grupo], grupo, f"{cantidad:,}", f"{pct:.0f}% del total")
-
-    c1, c2 = st.columns([1, 1.3], gap="large")
-    with c1:
-        orden_grupo = ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]
-        valores = [resumen_cluster.get(g, 0) for g in orden_grupo]
-        fig2_plotly = go.Figure(go.Bar(
-            x=valores, y=orden_grupo, orientation="h",
-            marker_color=[colores[g] for g in orden_grupo],
-            text=valores, texttemplate="%{text:,}", textposition="outside",
-            marker_line_color="white", marker_line_width=1,
-        ))
-        fig2_plotly.update_yaxes(autorange="reversed")
-        fig2_plotly = diseno_plotly(fig2_plotly, "Distribución de grupos", altura=300,
-                                      xlabel="Empleados", mostrar_leyenda=False)
-        fig2_plotly.update_xaxes(range=[0, max(valores) * 1.18])
-        st.plotly_chart(fig2_plotly, use_container_width=True)
-
-        fig2, ax2 = plt.subplots(figsize=(4.6, 3.4))
-        barras = ax2.barh(orden_grupo, valores, color=[colores[g] for g in orden_grupo])
-        ax2.invert_yaxis()
-        ax2.set_xlabel("Empleados")
-        estilo_titulo_mpl(ax2, "Distribución de grupos")
-        for b, v in zip(barras, valores):
-            ax2.text(b.get_width() + max(valores) * 0.01, b.get_y() + b.get_height() / 2,
-                      f"{v:,}", va="center", fontsize=8.5)
-        fig2.tight_layout()
-        plt.close(fig2)
-    with c2:
-        resumen_area = df_clusters.groupby(["area", "grupo"]).size().unstack(fill_value=0)
-        orden_cols = [c for c in ["Alto desempeño", "Desempeño medio", "Bajo desempeño"] if c in resumen_area.columns]
-        resumen_area = resumen_area[orden_cols]
-
-        fig3_plotly = go.Figure()
-        for col in resumen_area.columns:
-            fig3_plotly.add_bar(x=resumen_area.index, y=resumen_area[col], name=col,
-                                  marker_color=colores.get(col, "#999"),
-                                  marker_line_color="white", marker_line_width=1)
-        fig3_plotly = diseno_plotly(fig3_plotly, "Grupos por área", altura=320, ylabel="Empleados")
-        st.plotly_chart(fig3_plotly, use_container_width=True)
-
-        fig3, ax3 = plt.subplots(figsize=(7, 3.6))
-        resumen_area.plot(kind="bar", stacked=False, ax=ax3,
-                           color=[colores.get(c, "#999") for c in resumen_area.columns],
-                           width=0.75, edgecolor="white", linewidth=0.5)
-        plt.xticks(rotation=20)
-        ax3.set_ylabel("Empleados")
-        estilo_titulo_mpl(ax3, "Grupos por área")
-        leyenda_arriba_mpl(ax3, ncol=3)
-        fig3.tight_layout()
-        plt.close(fig3)
-
-    st.markdown("---")
-    titulo_seccion("Explorar empleados por grupo")
-    grupo_elegido = st.radio(
-        "Elige un grupo para ver a sus empleados",
-        options=["Alto desempeño", "Desempeño medio", "Bajo desempeño"],
-        horizontal=True,
-    )
-    tabla_grupo = df_clusters[df_clusters["grupo"] == grupo_elegido][
-        ["nombre_completo", "area", "departamento"] + score_cols_sel
-    ]
-    st.dataframe(
-        tabla_grupo.head(200), use_container_width=True, height=300,
-        column_config={
-            col: st.column_config.ProgressColumn(col, min_value=0, max_value=10, format="%.2f")
-            for col in score_cols_sel
-        },
-    )
-    st.caption(f"{len(tabla_grupo):,} empleados en '{grupo_elegido}' (mostrando hasta 200).")
-
-    if resultado["guardado"]:
-        st.caption(f"Modelo utilizado: {resultado['version_actual']} (guardado en el historial)")
+    titulo_seccion("Agrupación no supervisada (K-Means)")
+    if not modelo_activo:
+        st.info("⚠️ Selecciona un modelo previamente generado o crea un nuevo modelo para habilitar esta sección.")
     else:
-        st.caption("Modelo entrenado en esta sesión — todavía no se ha guardado en el historial.")
-        with st.form("guardar_modelo_form"):
-            nombre_version = st.text_input(
-                "Nombre o versión para este modelo",
-                value=f"v{len(cargar_historial()) + 1}_{'_'.join(PESOS[h]['prefijo'] for h in habilidades_sel)}",
-            )
-            enviar = st.form_submit_button("Guardar modelo")
-        if enviar:
-            if not nombre_version.strip():
-                st.warning("Escribe un nombre o versión antes de guardar.")
-            else:
-                ruta_guardada, entrada_nueva = guardar_modelo(
-                    resultado["paquete"], nombre_version.strip(), len(df_filtrado)
+
+        g1, g2, g3 = st.columns(3)
+        for col, grupo in zip([g1, g2, g3], ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]):
+            cantidad = resumen_cluster.get(grupo, 0)
+            pct = cantidad / total_emp * 100 if total_emp else 0
+            with col:
+                tarjeta_indicador(colores[grupo], grupo, f"{cantidad:,}", f"{pct:.0f}% del total")
+
+        c1, c2 = st.columns([1, 1.3], gap="large")
+        with c1:
+            orden_grupo = ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]
+            valores = [resumen_cluster.get(g, 0) for g in orden_grupo]
+            fig2_plotly = go.Figure(go.Bar(
+                x=valores, y=orden_grupo, orientation="h",
+                marker_color=[colores[g] for g in orden_grupo],
+                text=valores, texttemplate="%{text:,}", textposition="outside",
+                marker_line_color="white", marker_line_width=1,
+            ))
+            fig2_plotly.update_yaxes(autorange="reversed")
+            fig2_plotly = diseno_plotly(fig2_plotly, "Distribución de grupos", altura=300,
+                                          xlabel="Empleados", mostrar_leyenda=False)
+            fig2_plotly.update_xaxes(range=[0, max(valores) * 1.18])
+            st.plotly_chart(fig2_plotly, use_container_width=True)
+
+            fig2, ax2 = plt.subplots(figsize=(4.6, 3.4))
+            barras = ax2.barh(orden_grupo, valores, color=[colores[g] for g in orden_grupo])
+            ax2.invert_yaxis()
+            ax2.set_xlabel("Empleados")
+            estilo_titulo_mpl(ax2, "Distribución de grupos")
+            for b, v in zip(barras, valores):
+                ax2.text(b.get_width() + max(valores) * 0.01, b.get_y() + b.get_height() / 2,
+                          f"{v:,}", va="center", fontsize=8.5)
+            fig2.tight_layout()
+            plt.close(fig2)
+        with c2:
+            resumen_area = df_clusters.groupby(["area", "grupo"]).size().unstack(fill_value=0)
+            orden_cols = [c for c in ["Alto desempeño", "Desempeño medio", "Bajo desempeño"] if c in resumen_area.columns]
+            resumen_area = resumen_area[orden_cols]
+
+            fig3_plotly = go.Figure()
+            for col in resumen_area.columns:
+                fig3_plotly.add_bar(x=resumen_area.index, y=resumen_area[col], name=col,
+                                      marker_color=colores.get(col, "#999"),
+                                      marker_line_color="white", marker_line_width=1)
+            fig3_plotly = diseno_plotly(fig3_plotly, "Grupos por área", altura=320, ylabel="Empleados")
+            st.plotly_chart(fig3_plotly, use_container_width=True)
+
+            fig3, ax3 = plt.subplots(figsize=(7, 3.6))
+            resumen_area.plot(kind="bar", stacked=False, ax=ax3,
+                               color=[colores.get(c, "#999") for c in resumen_area.columns],
+                               width=0.75, edgecolor="white", linewidth=0.5)
+            plt.xticks(rotation=20)
+            ax3.set_ylabel("Empleados")
+            estilo_titulo_mpl(ax3, "Grupos por área")
+            leyenda_arriba_mpl(ax3, ncol=3)
+            fig3.tight_layout()
+            plt.close(fig3)
+
+        st.markdown("---")
+        titulo_seccion("Explorar empleados por grupo")
+        grupo_elegido = st.radio(
+            "Elige un grupo para ver a sus empleados",
+            options=["Alto desempeño", "Desempeño medio", "Bajo desempeño"],
+            horizontal=True,
+        )
+        tabla_grupo = df_clusters[df_clusters["grupo"] == grupo_elegido][
+            ["nombre_completo", "area", "departamento"] + score_cols_sel
+        ]
+        st.dataframe(
+            tabla_grupo.head(200).style.set_properties(**{'font-size': '0.85rem'}), use_container_width=True, height=300,
+            column_config={
+                col: st.column_config.ProgressColumn(col, min_value=0, max_value=10, format="%.2f")
+                for col in score_cols_sel
+            },
+        )
+        st.caption(f"{len(tabla_grupo):,} empleados en '{grupo_elegido}' (mostrando hasta 200).")
+
+        if resultado["guardado"]:
+            st.caption(f"Modelo utilizado: {resultado['version_actual']} (guardado en el historial)")
+        else:
+            st.caption("Modelo creado en esta sesión — todavía no se ha guardado en el historial.")
+            with st.form("guardar_modelo_form"):
+                nombre_version = st.text_input(
+                    "Nombre o versión para este modelo",
+                    value=f"v{len(cargar_historial()) + 1}_{'_'.join(PESOS[h]['prefijo'] for h in habilidades_sel)}",
                 )
-                resultado["guardado"] = True
-                resultado["version_actual"] = entrada_nueva["version"]
-                st.session_state["resultados"][clave] = resultado
-                st.success(f"Modelo guardado como '{entrada_nueva['version']}' ({entrada_nueva['fecha']}).")
-                st.rerun()
+                enviar = st.form_submit_button("Guardar modelo")
+            if enviar:
+                if not nombre_version.strip():
+                    st.warning("Escribe un nombre o versión antes de guardar.")
+                else:
+                    ruta_guardada, entrada_nueva = guardar_modelo(
+                        resultado["paquete"], nombre_version.strip(), len(df_filtrado)
+                    )
+                    resultado["guardado"] = True
+                    resultado["version_actual"] = entrada_nueva["version"]
+                    st.session_state["resultados"][clave] = resultado
+                    st.success(f"Modelo guardado como '{entrada_nueva['version']}' ({entrada_nueva['fecha']}).")
+                    st.rerun()
 
-    tabla_pdf_cluster = resumen_cluster.rename("Empleados").reset_index().rename(columns={"index": "Grupo"})
-    pdf_algoritmo = generar_pdf(
-        "Estadística del algoritmo (K-Means)", tabla_pdf_cluster,
-        [grafico_a_bytes(fig2), grafico_a_bytes(fig3)],
-        notas="Agrupación no supervisada en 3 grupos según el score de las habilidades seleccionadas.")
-    st.download_button("Descargar estadística del algoritmo (PDF)", data=pdf_algoritmo,
-                        file_name="estadistica_algoritmo.pdf", mime="application/pdf")
+        tabla_pdf_cluster = resumen_cluster.rename("Empleados").reset_index().rename(columns={"index": "Grupo"})
+        pdf_algoritmo = generar_pdf(
+            "Estadística del algoritmo (K-Means)", tabla_pdf_cluster,
+            [grafico_a_bytes(fig2), grafico_a_bytes(fig3)],
+            notas="Agrupación no supervisada en 3 grupos según el score de las habilidades seleccionadas.")
+        st.download_button("Descargar estadística del algoritmo (PDF)", data=pdf_algoritmo,
+                            file_name="estadistica_algoritmo.pdf", mime="application/pdf")
 
-# --------------------- Tab 4: Comparativa (pantalla dividida) --------------
+    # --------------------- Tab 4: Comparativa (pantalla dividida) --------------
 with tab_comparativa:
-    titulo_seccion("Estadística base (tu criterio) vs. estadística del algoritmo")
-    st.caption(
-        "Mismo empleado, dos formas de clasificarlo: a la izquierda tu regla por "
-        "umbrales sobre el score combinado de las habilidades elegidas; a la derecha "
-        "el grupo que le asignó K-Means. Abajo, el cruce de ambas."
-    )
+    if not modelo_activo:
+        st.info("⚠️ Selecciona un modelo previamente generado o crea modelo para habilitar esta sección.")
+    else:
+        titulo_seccion("Estadística base (criterio propio) vs. estadística del algoritmo")
+        st.caption(
+            "Mismo empleado, dos formas de clasificarlo: a la izquierda tu regla por "
+            "umbrales sobre el score combinado de las habilidades elegidas; a la derecha "
+            "el grupo que le asignó K-Means. Abajo, el cruce de ambas."
+        )
 
-    tarjeta_indicador(COLOR_MEDIO, "Coincidencia entre tu criterio y el algoritmo",
-                       f"{pct_coincidencia:.1f}%",
-                       "Óptimo↔Alto · Aceptable↔Medio · Necesita mejora↔Bajo")
+        tarjeta_indicador(COLOR_MEDIO, "Coincidencia entre criterio propio y el algoritmo",
+                           f"{pct_coincidencia:.1f}%",
+                           "Óptimo↔Alto · Aceptable↔Medio · Necesita mejora↔Bajo")
 
-    izq, der = st.columns(2, gap="large")
+        izq, der = st.columns(2, gap="large")
 
-    with izq:
-        st.markdown("**Base (proceso propio)**")
-        conteo_propio = df_clusters["clasificacion_propia"].value_counts().reindex(
-            ["Óptimo", "Aceptable", "Necesita mejora"]).fillna(0).astype(int)
-        st.dataframe(conteo_propio.rename("Empleados").reset_index().rename(columns={"index": "Clasificación"}),
-                     use_container_width=True)
-        orden_propio = ["Óptimo", "Aceptable", "Necesita mejora"]
-        valores4 = [conteo_propio.get(g, 0) for g in orden_propio]
-        fig4_plotly = go.Figure(go.Bar(
-            x=valores4, y=orden_propio, orientation="h",
-            marker_color=[colores_propio[g] for g in orden_propio],
-            text=valores4, texttemplate="%{text:,}", textposition="outside",
-            marker_line_color="white", marker_line_width=1,
-        ))
-        fig4_plotly.update_yaxes(autorange="reversed")
-        fig4_plotly = diseno_plotly(fig4_plotly, "Tu clasificación", altura=280,
-                                      xlabel="Empleados", mostrar_leyenda=False)
-        fig4_plotly.update_xaxes(range=[0, max(valores4 + [1]) * 1.18])
-        st.plotly_chart(fig4_plotly, use_container_width=True)
+        with izq:
+            st.markdown("**Base (proceso propio)**")
+            conteo_propio = df_clusters["clasificacion_propia"].value_counts().reindex(
+                ["Óptimo", "Aceptable", "Necesita mejora"]).fillna(0).astype(int)
+            st.dataframe(conteo_propio.rename("Empleados").reset_index().rename(columns={"index": "Clasificación"}).style.set_properties(**{'font-size': '0.85rem'}),
+                         use_container_width=True)
+            orden_propio = ["Óptimo", "Aceptable", "Necesita mejora"]
+            valores4 = [conteo_propio.get(g, 0) for g in orden_propio]
+            fig4_plotly = go.Figure(go.Bar(
+                x=valores4, y=orden_propio, orientation="h",
+                marker_color=[colores_propio[g] for g in orden_propio],
+                text=valores4, texttemplate="%{text:,}", textposition="outside",
+                marker_line_color="white", marker_line_width=1,
+            ))
+            fig4_plotly.update_yaxes(autorange="reversed")
+            fig4_plotly = diseno_plotly(fig4_plotly, "Mi clasificación", altura=280,
+                                          xlabel="Empleados", mostrar_leyenda=False)
+            fig4_plotly.update_xaxes(range=[0, max(valores4 + [1]) * 1.18])
+            st.plotly_chart(fig4_plotly, use_container_width=True)
 
-        fig4, ax4 = plt.subplots(figsize=(4.6, 3.2))
-        barras4 = ax4.barh(orden_propio, valores4, color=[colores_propio[g] for g in orden_propio])
-        ax4.invert_yaxis()
-        ax4.set_xlabel("Empleados")
-        estilo_titulo_mpl(ax4, "Tu clasificación")
-        for b, v in zip(barras4, valores4):
-            ax4.text(b.get_width() + max(valores4 + [1]) * 0.01, b.get_y() + b.get_height() / 2,
-                      f"{v:,}", va="center", fontsize=8.5)
-        fig4.tight_layout()
-        plt.close(fig4)
+            fig4, ax4 = plt.subplots(figsize=(4.6, 3.2))
+            barras4 = ax4.barh(orden_propio, valores4, color=[colores_propio[g] for g in orden_propio])
+            ax4.invert_yaxis()
+            ax4.set_xlabel("Empleados")
+            estilo_titulo_mpl(ax4, "Tu clasificación")
+            for b, v in zip(barras4, valores4):
+                ax4.text(b.get_width() + max(valores4 + [1]) * 0.01, b.get_y() + b.get_height() / 2,
+                          f"{v:,}", va="center", fontsize=8.5)
+            fig4.tight_layout()
+            plt.close(fig4)
 
-    with der:
-        st.markdown("**Algoritmo (K-Means)**")
-        st.dataframe(resumen_cluster.rename("Empleados").reset_index().rename(columns={"index": "Grupo"}),
-                     use_container_width=True)
-        orden_grupo5 = ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]
-        valores5 = [resumen_cluster.get(g, 0) for g in orden_grupo5]
-        fig5_plotly = go.Figure(go.Bar(
-            x=valores5, y=orden_grupo5, orientation="h",
-            marker_color=[colores[g] for g in orden_grupo5],
-            text=valores5, texttemplate="%{text:,}", textposition="outside",
-            marker_line_color="white", marker_line_width=1,
-        ))
-        fig5_plotly.update_yaxes(autorange="reversed")
-        fig5_plotly = diseno_plotly(fig5_plotly, "Clasificación del algoritmo", altura=280,
-                                      xlabel="Empleados", mostrar_leyenda=False)
-        fig5_plotly.update_xaxes(range=[0, max(valores5 + [1]) * 1.18])
-        st.plotly_chart(fig5_plotly, use_container_width=True)
+        with der:
+            st.markdown("**Algoritmo (K-Means)**")
+            st.dataframe(resumen_cluster.rename("Empleados").reset_index().rename(columns={"index": "Grupo"}).style.set_properties(**{'font-size': '0.85rem'}),
+                         use_container_width=True)
+            orden_grupo5 = ["Alto desempeño", "Desempeño medio", "Bajo desempeño"]
+            valores5 = [resumen_cluster.get(g, 0) for g in orden_grupo5]
+            fig5_plotly = go.Figure(go.Bar(
+                x=valores5, y=orden_grupo5, orientation="h",
+                marker_color=[colores[g] for g in orden_grupo5],
+                text=valores5, texttemplate="%{text:,}", textposition="outside",
+                marker_line_color="white", marker_line_width=1,
+            ))
+            fig5_plotly.update_yaxes(autorange="reversed")
+            fig5_plotly = diseno_plotly(fig5_plotly, "Clasificación del algoritmo", altura=280,
+                                          xlabel="Empleados", mostrar_leyenda=False)
+            fig5_plotly.update_xaxes(range=[0, max(valores5 + [1]) * 1.18])
+            st.plotly_chart(fig5_plotly, use_container_width=True)
 
-        fig5, ax5 = plt.subplots(figsize=(4.6, 3.2))
-        barras5 = ax5.barh(orden_grupo5, valores5, color=[colores[g] for g in orden_grupo5])
-        ax5.invert_yaxis()
-        ax5.set_xlabel("Empleados")
-        estilo_titulo_mpl(ax5, "Clasificación del algoritmo")
-        for b, v in zip(barras5, valores5):
-            ax5.text(b.get_width() + max(valores5 + [1]) * 0.01, b.get_y() + b.get_height() / 2,
-                      f"{v:,}", va="center", fontsize=8.5)
-        fig5.tight_layout()
-        plt.close(fig5)
+            fig5, ax5 = plt.subplots(figsize=(4.6, 3.2))
+            barras5 = ax5.barh(orden_grupo5, valores5, color=[colores[g] for g in orden_grupo5])
+            ax5.invert_yaxis()
+            ax5.set_xlabel("Empleados")
+            estilo_titulo_mpl(ax5, "Clasificación del algoritmo")
+            for b, v in zip(barras5, valores5):
+                ax5.text(b.get_width() + max(valores5 + [1]) * 0.01, b.get_y() + b.get_height() / 2,
+                          f"{v:,}", va="center", fontsize=8.5)
+            fig5.tight_layout()
+            plt.close(fig5)
 
-    st.markdown("---")
-    titulo_seccion("Cruce entre ambas clasificaciones")
-    st.dataframe(crosstab, use_container_width=True)
+        st.markdown("---")
+        titulo_seccion("Cruce entre ambas clasificaciones")
+        st.dataframe(crosstab.style.set_properties(**{'font-size': '0.85rem'}), use_container_width=True)
 
-    fig6_plotly = go.Figure()
-    for col in crosstab.columns:
-        fig6_plotly.add_bar(x=crosstab.index, y=crosstab[col], name=col,
-                              marker_color=colores[col],
-                              marker_line_color="white", marker_line_width=1)
-    fig6_plotly = diseno_plotly(fig6_plotly, "¿En qué grupo del algoritmo cae cada clasificación propia?",
-                                  altura=340, xlabel="Tu clasificación", ylabel="Empleados")
-    st.plotly_chart(fig6_plotly, use_container_width=True)
+        fig6_plotly = go.Figure()
+        for col in crosstab.columns:
+            fig6_plotly.add_bar(x=crosstab.index, y=crosstab[col], name=col,
+                                  marker_color=colores[col],
+                                  marker_line_color="white", marker_line_width=1)
+        fig6_plotly = diseno_plotly(fig6_plotly, "¿En qué grupo del algoritmo cae cada clasificación propia?",
+                                      altura=340, xlabel="Tu clasificación", ylabel="Empleados")
+        st.plotly_chart(fig6_plotly, use_container_width=True)
 
-    fig6, ax6 = plt.subplots(figsize=(7.5, 3.6))
-    crosstab.plot(kind="bar", stacked=False, ax=ax6,
-                   color=[colores[c] for c in crosstab.columns],
-                   width=0.75, edgecolor="white", linewidth=0.5)
-    ax6.set_ylabel("Empleados")
-    ax6.set_xlabel("Tu clasificación")
-    leyenda_arriba_mpl(ax6, ncol=3)
-    plt.xticks(rotation=0)
-    estilo_titulo_mpl(ax6, "¿En qué grupo del algoritmo cae cada clasificación propia?")
-    for cont in ax6.containers:
-        ax6.bar_label(cont, fontsize=7, padding=2)
-    fig6.tight_layout()
-    plt.close(fig6)
+        fig6, ax6 = plt.subplots(figsize=(7.5, 3.6))
+        crosstab.plot(kind="bar", stacked=False, ax=ax6,
+                       color=[colores[c] for c in crosstab.columns],
+                       width=0.75, edgecolor="white", linewidth=0.5)
+        ax6.set_ylabel("Empleados")
+        ax6.set_xlabel("Tu clasificación")
+        leyenda_arriba_mpl(ax6, ncol=3)
+        plt.xticks(rotation=0)
+        estilo_titulo_mpl(ax6, "¿En qué grupo del algoritmo cae cada clasificación propia?")
+        for cont in ax6.containers:
+            ax6.bar_label(cont, fontsize=7, padding=2)
+        fig6.tight_layout()
+        plt.close(fig6)
 
-    tabla_pdf_cruce = crosstab.reset_index().rename(columns={"clasificacion_propia": "Tu clasificación"})
-    pdf_comparativa = generar_pdf(
-        "Comparativa: estadística base vs. algoritmo", tabla_pdf_cruce,
-        [grafico_a_bytes(fig4), grafico_a_bytes(fig5), grafico_a_bytes(fig6)],
-        notas=(f"Coincidencia global entre el criterio propio y el algoritmo: "
-               f"{pct_coincidencia:.1f}%. Óptimo~Alto desempeño, "
-               f"Aceptable~Desempeño medio, Necesita mejora~Bajo desempeño."))
-    st.download_button("Descargar comparativa (PDF)", data=pdf_comparativa,
-                        file_name="comparativa.pdf", mime="application/pdf")
+        tabla_pdf_cruce = crosstab.reset_index().rename(columns={"clasificacion_propia": "Tu clasificación"})
+        pdf_comparativa = generar_pdf(
+            "Comparativa: estadística base vs. algoritmo", tabla_pdf_cruce,
+            [grafico_a_bytes(fig4), grafico_a_bytes(fig5), grafico_a_bytes(fig6)],
+            notas=(f"Coincidencia global entre el criterio propio y el algoritmo: "
+                   f"{pct_coincidencia:.1f}%. Óptimo~Alto desempeño, "
+                   f"Aceptable~Desempeño medio, Necesita mejora~Bajo desempeño."))
+        st.download_button("Descargar comparativa (PDF)", data=pdf_comparativa,
+                            file_name="comparativa.pdf", mime="application/pdf")
 
-# --------------------- Tab 5: Historial de modelos --------------------------
+    # --------------------- Tab 5: Historial de modelos --------------------------
 with tab_historial:
     titulo_seccion("Modelos guardados")
     historial_actual = cargar_historial()
     if not historial_actual:
         st.info(
-            "Todavía no has guardado ningún modelo. Entrena uno en la pestaña "
+            "Todavía no has guardado ningún modelo. Crea uno en la pestaña "
             "'Resultado del algoritmo' y usa el botón 'Guardar modelo' para que "
             "aparezca aquí con su fecha."
         )
